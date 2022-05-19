@@ -1,0 +1,11 @@
+.timeline__feed {
+	display: flex;
+	justify-content: center;
+	flex: 6.5;
+	padding: 0 auto;
+	margin-top: 1em;
+}
+
+.timeline__feed__wrapper {
+	padding: 20px;
+}

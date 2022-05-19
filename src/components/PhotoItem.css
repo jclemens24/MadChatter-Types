@@ -1,0 +1,29 @@
+.images {
+	height: 200px;
+	width: 200px;
+}
+
+.photo-actions {
+	display: flex;
+	justify-content: space-around;
+	margin: 0.5em 0;
+}
+
+.photo-actions button {
+	width: 45%;
+	border: none;
+	border-radius: 8px;
+	padding: 0.5em 0.5em;
+	margin: 0.5em 0;
+	background: #5f3dc4;
+	color: #fff;
+	font: inherit;
+	font-size: 14px;
+	outline: none;
+	cursor: pointer;
+}
+
+.photo-actions button:hover {
+	transform: scale(1.1, 1.1);
+	background: #845ef7;
+}

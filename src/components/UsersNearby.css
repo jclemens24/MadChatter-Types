@@ -1,0 +1,22 @@
+.friendsNearbyList {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	cursor: pointer;
+}
+
+.friendsNearbyList h4 {
+	font-family: inherit;
+}
+
+.friendsNearbyImg {
+	width: 50px;
+	height: 50px;
+	border-radius: 50%;
+	object-fit: cover;
+	margin-right: 3px;
+}
+
+.add_icon {
+	color: #adb5bd;
+}

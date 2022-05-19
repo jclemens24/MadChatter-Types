@@ -1,0 +1,91 @@
+.profile {
+	display: flex;
+}
+
+.profile__right {
+	flex: 9;
+}
+
+.profile__cover-pic {
+	height: 320px;
+	position: relative;
+}
+
+.profile__cover-image {
+	width: 100%;
+	height: 300px;
+	object-fit: cover;
+	object-position: center;
+	cursor: pointer;
+	z-index: -1;
+}
+
+.profile__user-image {
+	width: 200px;
+	height: 200px;
+	border-radius: 50%;
+	object-fit: cover;
+	position: absolute;
+	left: 0;
+	right: 0;
+	margin: auto;
+	top: 150px;
+	border: 3px solid white;
+	z-index: 1;
+}
+
+.visually-hidden {
+	position: absolute;
+	height: 1px;
+	width: 1px;
+	overflow: hidden;
+	clip: rect(1px, 1px, 1px, 1px);
+}
+
+.visually-hidden__label {
+	position: relative;
+	display: flex;
+	padding: 0 10rem;
+	justify-content: center;
+	z-index: 2;
+	color: #fff;
+	opacity: 0.9;
+	cursor: pointer;
+}
+
+.visually-hidden__label-hidden-cover-image {
+	position: absolute;
+	width: 100%;
+	min-height: 250px;
+	display: flex;
+	justify-content: center;
+	opacity: 0;
+	cursor: pointer;
+}
+
+.photo__upload--btn {
+	position: absolute;
+	top: 20px;
+	left: 50%;
+	margin-top: 1em;
+}
+.profile__info {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+
+.profile__info--name {
+	font-size: 28px;
+	z-index: 2;
+}
+
+.profile__info--desc {
+	margin-bottom: 1.5em;
+	font-style: italic;
+}
+
+.profile__right--bottom {
+	display: flex;
+}

@@ -1,0 +1,10 @@
+.reaction-button {
+	border: none;
+	outline: none;
+	background-color: transparent;
+}
+
+.reaction-button:hover {
+	cursor: pointer;
+	transform: scale(1.5) perspective(1px);
+}

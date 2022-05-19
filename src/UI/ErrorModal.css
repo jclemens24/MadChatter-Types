@@ -1,0 +1,23 @@
+.modal__footer button {
+	width: 10rem;
+	height: 3.5rem;
+	padding: 0.5rem 1rem;
+	border: 1px solid #5f3dc4;
+	border-radius: 12px;
+	background: #5f3dc4;
+	color: #fff;
+	font-size: 16px;
+	cursor: pointer;
+	text-decoration: none;
+	display: inline-block;
+	margin: 0 0.5rem;
+}
+
+.modal__footer button:focus {
+	outline: none;
+}
+
+.modal__footer button:hover,
+.modal__footer button:active {
+	background: #6d56b3;
+}

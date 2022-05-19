@@ -1,0 +1,27 @@
+.wrapper {
+	z-index: 100;
+	position: fixed;
+	top: 15%;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	overflow: auto;
+}
+
+.photo--modal {
+	position: relative;
+	height: 100%;
+	width: 100%;
+}
+
+.modalWrapperBtn {
+	color: #fff;
+	position: absolute;
+	left: 20px;
+	background: transparent;
+	border: none;
+	font-size: 2rem;
+	cursor: pointer;
+	height: inherit;
+	transform: scale(1.2, 1.2);
+}
