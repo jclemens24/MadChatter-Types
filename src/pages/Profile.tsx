@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import './Profile.css';
 import { Outlet, useNavigate } from 'react-router-dom';
 import LeftBar from '../components/LeftBar';
@@ -14,14 +14,12 @@ import {
 	authActions,
 	userToken,
 	authorizedUser,
-	authError,
 } from '../features/auth/authSlice';
 
 const Profile = () => {
 	const dispatch = useAppDispatch();
 	const authUser = useAppSelector(authorizedUser);
 	const token = useAppSelector(userToken);
-	const appError = useAppSelector(authError);
 	const navigate = useNavigate();
 	const { loading, error, sendRequest, clearError } = useHttp();
 	const { status } = useAppSelector(state => state.auth);
