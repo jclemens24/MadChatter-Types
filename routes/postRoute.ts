@@ -1,11 +1,13 @@
 import express from 'express';
+import { commentRouter } from './commentRoute';
 import { verifyAuth } from '../controller/authController';
 import * as postController from '../controller/postController';
 import { deleteComments } from '../controller/commentController';
 import { upload } from '../middleware/fileUpload';
-import { router } from './userRoute';
 
-const postRouter = express.Router();
+const postRouter = express.Router({ mergeParams: true });
+
+postRouter.use('/:postId/comments', commentRouter);
 
 postRouter.use(verifyAuth);
 postRouter.put('/:postId/like', postController.likePost);

@@ -3,7 +3,7 @@ import { SocketData } from '../app';
 abstract class SessionStore {
   findSession(id: string) {}
 
-  saveSession(id: string, session: any) {}
+  saveSession(id: string, session: SocketData) {}
 
   findAllSessions(): void {}
 }
@@ -16,14 +16,18 @@ export class InMemorySessionStore extends SessionStore {
   }
 
   findSession(id: string): SocketData | undefined {
-    return this.sessions.get(id);
+    if (this.sessions.has(id)) {
+      return this.sessions.get(id);
+    } else {
+      return undefined;
+    }
   }
 
-  saveSession(id: string, session: any): void {
+  saveSession(id: string, session: SocketData): void {
     this.sessions.set(id, session);
   }
 
-  findAllSessions(): any[] {
+  findAllSessions(): SocketData[] {
     return [...this.sessions.values()];
   }
 }

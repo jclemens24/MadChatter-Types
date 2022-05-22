@@ -29,6 +29,7 @@ const errorController_1 = require("./controller/errorController");
 const appError_1 = require("./utils/appError");
 const sessionStore_1 = require("./store/sessionStore");
 const sessionStore = new sessionStore_1.InMemorySessionStore();
+console.log(sessionStore);
 dotenv.config({ path: './config.env' });
 const DB = process.env.DATABASE.replace('<PASSWORD>', process.env.DATABASE_PASSWORD);
 mongoose
@@ -105,7 +106,7 @@ io.on('connection', (socket) => __awaiter(void 0, void 0, void 0, function* () {
     });
     socket.emit('users', users);
     socket.broadcast.emit('userConnected', {
-        userId: socket.data.userId,
+        _id: socket.data.userId,
         connected: true
     });
     socket.on('privateMessage', ({ content, to, from }) => {

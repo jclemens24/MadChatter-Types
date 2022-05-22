@@ -12,7 +12,12 @@ class InMemorySessionStore extends SessionStore {
         this.sessions = new Map();
     }
     findSession(id) {
-        return this.sessions.get(id);
+        if (this.sessions.has(id)) {
+            return this.sessions.get(id);
+        }
+        else {
+            return undefined;
+        }
     }
     saveSession(id, session) {
         this.sessions.set(id, session);

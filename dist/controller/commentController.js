@@ -21,6 +21,7 @@ const setPostUserId = (req, res, next) => {
         req.body.post = req.params.postId;
     if (!req.body.user)
         req.body.user = req.user._id;
+    console.log(req.body.post, req.body.user);
     next();
 };
 exports.setPostUserId = setPostUserId;
@@ -33,7 +34,12 @@ exports.getAllComments = (0, catchAsync_1.catchAsync)((req, res, next) => __awai
     });
 }));
 exports.createComment = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const comment = yield commentsModel_1.default.create(req.body);
+    console.log(req.body.comment);
+    const comment = yield commentsModel_1.default.create({
+        post: req.body.post,
+        user: req.body.user,
+        comment: req.body.comment
+    });
     if (!comment)
         return next(new appError_1.AppError('Error creating the comment. Please try your request again', 404));
     res.status(201).json({

@@ -28,12 +28,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.postRouter = void 0;
 const express_1 = __importDefault(require("express"));
+const commentRoute_1 = require("./commentRoute");
 const authController_1 = require("../controller/authController");
 const postController = __importStar(require("../controller/postController"));
 const commentController_1 = require("../controller/commentController");
 const fileUpload_1 = require("../middleware/fileUpload");
-const postRouter = express_1.default.Router();
+const postRouter = express_1.default.Router({ mergeParams: true });
 exports.postRouter = postRouter;
+postRouter.use('/:postId/comments', commentRoute_1.commentRouter);
 postRouter.use(authController_1.verifyAuth);
 postRouter.put('/:postId/like', postController.likePost);
 postRouter.put('/:postId/dislike', postController.dislikePost);

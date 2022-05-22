@@ -10,6 +10,7 @@ export const setPostUserId = (
 ) => {
   if (!req.body.post) req.body.post = req.params.postId;
   if (!req.body.user) req.body.user = req.user._id;
+  console.log(req.body.post, req.body.user);
   next();
 };
 
@@ -28,7 +29,12 @@ export const getAllComments = catchAsync(
 
 export const createComment = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    const comment = await Comment.create(req.body);
+    console.log(req.body.comment);
+    const comment = await Comment.create({
+      post: req.body.post,
+      user: req.body.user,
+      comment: req.body.comment
+    });
 
     if (!comment)
       return next(

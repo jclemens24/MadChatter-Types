@@ -1,7 +1,7 @@
 import express = require('express');
 import cors from 'cors';
 import { createServer } from 'http';
-import { Server, Socket } from 'socket.io';
+import { Server } from 'socket.io';
 import mongoose = require('mongoose');
 import dotenv = require('dotenv');
 import morgan = require('morgan');
@@ -15,15 +15,15 @@ import { messageRouter } from './routes/messageRoute';
 import { errorController } from './controller/errorController';
 import { AppError } from './utils/appError';
 import { InMemorySessionStore } from './store/sessionStore';
-import { Handshake } from 'socket.io/dist/socket';
 
 const sessionStore = new InMemorySessionStore();
+console.log(sessionStore);
 
 interface User {
   readonly _id: string;
 }
 
-interface ClientToServerEvents {
+export interface ClientToServerEvents {
   privateMessage: ({
     content,
     to,
@@ -35,7 +35,7 @@ interface ClientToServerEvents {
   }) => void;
 }
 
-interface ServerToClientEvents {
+export interface ServerToClientEvents {
   userConnected: (data: object) => void;
   session: (data: object) => void;
   users: (...data: any[]) => void;
@@ -52,10 +52,11 @@ interface ServerToClientEvents {
 }
 
 export interface SocketData {
-  sessionId: string;
-  userId: string;
-  _id: string;
-  username: string;
+  sessionId?: string;
+  userId?: string;
+  _id?: string;
+  username?: string;
+  connected: boolean;
 }
 
 dotenv.config({ path: './config.env' });
@@ -156,7 +157,7 @@ io.on('connection', async socket => {
 
   socket.emit('users', users);
   socket.broadcast.emit('userConnected', {
-    userId: socket.data.userId,
+    _id: socket.data.userId,
     connected: true
   });
 
