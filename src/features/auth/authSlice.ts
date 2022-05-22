@@ -43,7 +43,7 @@ export interface AuthState {
 	token: string | null;
 	isLoggedIn: boolean;
 	status: 'idle' | 'pending' | 'success' | 'failed';
-	errorMessage: AppError | undefined;
+	errorMessage: string | undefined;
 }
 
 const initialAuthState = {
@@ -98,13 +98,16 @@ const authSlice = createSlice({
 			state.token = action.payload.token;
 			state.isLoggedIn = true;
 			state.status = 'success';
+			if (state.user === null) {
+				return initialAuthState;
+			}
 		});
 		builder.addCase(initializeUserCheck.pending, state => {
 			state.status = 'pending';
 		});
 		builder.addCase(initializeUserCheck.rejected, (state, action) => {
 			state.status = 'failed';
-			state.errorMessage = action.error.message as unknown as AppError;
+			state.errorMessage = action.payload as string;
 			state.isLoggedIn = false;
 		});
 		builder.addCase(login.fulfilled, (state, action) => {
@@ -118,7 +121,7 @@ const authSlice = createSlice({
 		});
 		builder.addCase(login.rejected, (state, action) => {
 			state.status = 'failed';
-			state.errorMessage = action.payload;
+			state.errorMessage = action.payload?.errorMessage;
 			state.isLoggedIn = false;
 			state.token = null;
 		});
@@ -134,7 +137,7 @@ const authSlice = createSlice({
 		});
 		builder.addCase(register.rejected, (state, action) => {
 			state.status = 'failed';
-			state.errorMessage = action.payload;
+			state.errorMessage = action.payload?.errorMessage;
 			state.isLoggedIn = false;
 		});
 		builder.addCase(addAFriend.fulfilled, (state, action) => {
@@ -146,7 +149,7 @@ const authSlice = createSlice({
 		});
 		builder.addCase(addAFriend.rejected, (state, action) => {
 			state.status = 'failed';
-			state.errorMessage = action.payload;
+			state.errorMessage = action.payload?.errorMessage;
 		});
 		builder.addCase(unfollowAFriend.fulfilled, (state, action) => {
 			state.status = 'success';
@@ -159,7 +162,7 @@ const authSlice = createSlice({
 		});
 		builder.addCase(unfollowAFriend.rejected, (state, action) => {
 			state.status = 'failed';
-			state.errorMessage = action.payload;
+			state.errorMessage = action.payload?.errorMessage;
 		});
 	},
 });

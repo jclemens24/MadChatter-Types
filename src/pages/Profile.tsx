@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './Profile.css';
 import { Outlet, useNavigate } from 'react-router-dom';
 import LeftBar from '../components/LeftBar';

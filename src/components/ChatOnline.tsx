@@ -7,13 +7,13 @@ import { Chat } from '../pages/Messenger';
 
 interface ChatOnlineProps {
 	user: User;
-	onlineUsers: unknown[];
+	onlineUsers: User['_id'][];
 	setCurrentChat: React.Dispatch<Chat | undefined>;
 }
 
 export default function ChatOnline(props: ChatOnlineProps) {
 	const [friends, setFriends] = useState<User[]>();
-	const [onlineFriends, setOnlineFriends] = useState<User[]>();
+	const [onlineFriends, setOnlineFriends] = useState<User[] | null>(null);
 	const token = useAppSelector(userToken);
 
 	useEffect(() => {

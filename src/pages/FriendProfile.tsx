@@ -40,44 +40,48 @@ const FriendProfile = () => {
 	while (status === 'idle') {
 		return <LoadingSpinner asOverlay />;
 	}
-	if (error && typeof errorMessage === 'string') {
+	if (error) {
 		return <ErrorModal error={errorMessage} onClear={clearError} />;
 	}
 
-	return (
-		<React.Fragment>
-			<div className='profile'>
-				<LeftBar user={friendsData} />
-				<div className='profile__right'>
-					<div className='profile__top'>
-						<div className='profile__cover-pic'>
-							<img
-								className='profile__cover-image'
-								src={`${process.env.REACT_APP_ASSETS}/${friendsData.coverPic}`}
-								alt={`${friendsData.firstName} profile`}
-							/>
-							<img
-								className='profile__user-image'
-								src={`${process.env.REACT_APP_ASSETS}/${friendsData.profilePic}`}
-								alt=''
-							/>
+	if (status === 'success') {
+		return (
+			<React.Fragment>
+				<div className='profile'>
+					<LeftBar user={friendsData} />
+					<div className='profile__right'>
+						<div className='profile__top'>
+							<div className='profile__cover-pic'>
+								<img
+									className='profile__cover-image'
+									src={`$http://localhost:8000/${friendsData.coverPic}`}
+									alt={`${friendsData.firstName} profile`}
+								/>
+								<img
+									className='profile__user-image'
+									src={`http://localhost:8000/${friendsData.profilePic}`}
+									alt=''
+								/>
+							</div>
+							<div className='profile__info'>
+								<h4 className='profile__info--name'>{`${friendsData.firstName} ${friendsData.lastName}`}</h4>
+								<span className='profile__info--desc'>
+									{friendsData.catchPhrase}
+								</span>
+							</div>
 						</div>
-						<div className='profile__info'>
-							<h4 className='profile__info--name'>{`${friendsData.firstName} ${friendsData.lastName}`}</h4>
-							<span className='profile__info--desc'>
-								{friendsData.catchPhrase}
-							</span>
+						<div className='profile__right--bottom'>
+							<FriendUserFeed user={friendsData} />
+							<RightBar user={friendsData} />
 						</div>
 					</div>
-					<div className='profile__right--bottom'>
-						<FriendUserFeed user={friendsData} />
-						<RightBar user={friendsData} />
-					</div>
+					<Outlet />
 				</div>
-				<Outlet />
-			</div>
-		</React.Fragment>
-	);
+			</React.Fragment>
+		);
+	} else {
+		return <LoadingSpinner asOverlay />;
+	}
 };
 
 export default FriendProfile;

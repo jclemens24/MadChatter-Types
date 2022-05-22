@@ -6,7 +6,7 @@ import {
 	ThunkAction,
 	AnyAction,
 } from '@reduxjs/toolkit';
-import axios, { AxiosResponse } from 'axios';
+import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { User, AppError, APIResponseData } from '../auth/authSlice';
 import { reactionEmoji } from '../../components/Reactions';
 import { RootState } from '../../app/store';
@@ -170,7 +170,7 @@ export const makeAPost = createAsyncThunk<
 	{ token: string; formData: FormData },
 	{ rejectValue: AppError }
 >('post/makeAPost', async ({ token, formData }, thunkApi) => {
-	const res = await axios({
+	const res: AxiosRequestConfig = await axios({
 		method: 'POST',
 		url: `http://localhost:8000/api/posts`,
 		headers: {
@@ -179,11 +179,12 @@ export const makeAPost = createAsyncThunk<
 		},
 		data: formData,
 	});
-	const data = (await res.data) as APIResponseData<PostState>;
-	if (res.data.status === 'error' || res.data.status === 'fail') {
-		return thunkApi.rejectWithValue(res.data.message);
+	if (res.data.status === 'fail' || res.data.status === 'error') {
+		return thunkApi.rejectWithValue({
+			errorMessage: await res.data.message,
+		} as AppError);
 	}
-	return data;
+	return (await res.data) as APIResponseData<PostState>;
 });
 
 export const likeAPost = createAsyncThunk<
@@ -229,27 +230,25 @@ export const commentOnAPost = createAsyncThunk<
 	{ token: string; postId: Post['_id']; comment: string },
 	{ rejectValue: AppError }
 >('post/commentOnAPost', async ({ token, postId, comment }, thunkApi) => {
-	const controller = new AbortController();
-	const res: AxiosResponse<any, any> = await axios({
-		method: 'POST',
-		signal: controller.signal,
-		url: `http://localhost:8000/api/posts/${postId}/comments`,
-		headers: {
-			Authorization: `Bearer ${token}`,
-		},
-		data: {
-			comment,
-		},
-	});
-	thunkApi.signal.addEventListener('abort', () => {
-		controller.abort();
-		return thunkApi.rejectWithValue({ errorMessage: 'Request Aborted!' });
-	});
-	const data = (await res.data) as Record<string, any>;
-	if (res.data.status === 'error' || res.data.status === 'fail') {
-		return thunkApi.rejectWithValue(res.data.message);
+	const response: Response = await fetch(
+		`http://localhost:8000/api/posts/${postId}/comments`,
+		{
+			method: 'post',
+			headers: {
+				authorization: `Bearer ${token}`,
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({ comment: comment }),
+		}
+	);
+
+	const data = await response.json();
+
+	if (!response.ok) {
+		return thunkApi.rejectWithValue({ errorMessage: data.message });
 	}
-	return data;
+
+	return data as Record<string, any>;
 });
 
 export const getPostComments = createAsyncThunk<

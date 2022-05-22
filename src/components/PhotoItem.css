@@ -1,6 +1,6 @@
 .images {
-	height: 200px;
-	width: 200px;
+	max-height: 400px;
+	max-width: 400px;
 }
 
 .photo-actions {
@@ -21,6 +21,10 @@
 	font-size: 14px;
 	outline: none;
 	cursor: pointer;
+	height: 50px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 .photo-actions button:hover {

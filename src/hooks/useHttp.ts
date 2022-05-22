@@ -1,11 +1,9 @@
-import { useState, useCallback, useRef, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import axios from 'axios';
 
 export const useHttp = () => {
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState<string | null>(null);
-
-	const activeHttpRequests = useRef<AbortController[]>([]);
 
 	const sendRequest = useCallback(
 		async (
@@ -15,19 +13,13 @@ export const useHttp = () => {
 			body: Record<string, unknown> | null | FormData = null
 		) => {
 			try {
-				const controller = new AbortController();
-				activeHttpRequests.current.push(controller);
 				setLoading(true);
 				const res = await axios({
 					method: method,
-					signal: controller.signal,
 					url: url,
 					headers: headers,
 					data: body,
 				});
-				activeHttpRequests.current = activeHttpRequests.current.filter(
-					signal => signal !== controller
-				);
 
 				const data = await res.data;
 				if (res.data.status === 'fail' || res.data.status === 'error') {
@@ -39,11 +31,7 @@ export const useHttp = () => {
 				setLoading(false);
 				return data;
 			} catch (err: unknown) {
-				if (err instanceof Error) {
-					setError(err.message);
-					setLoading(false);
-					throw err;
-				}
+				setLoading(false);
 			}
 		},
 		[]
@@ -53,10 +41,5 @@ export const useHttp = () => {
 		setError(null);
 	};
 
-	useEffect(() => {
-		return () => {
-			activeHttpRequests.current.forEach(signal => signal.abort());
-		};
-	}, []);
 	return { loading, error, sendRequest, clearError };
 };

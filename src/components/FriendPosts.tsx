@@ -7,7 +7,6 @@ import ErrorModal from '../UI/ErrorModal';
 import PostComments from './PostComments';
 import { userToken, authorizedUser } from '../features/auth/authSlice';
 import InputEmojiWithRef from 'react-input-emoji';
-import { deleteAPost } from '../features/post/postSlice';
 import {
 	commentOnAFriendsPost,
 	likeAFriendsPost,
@@ -80,7 +79,7 @@ const FriendPosts = props => {
 	};
 
 	const handleDeletePost = async () => {
-		dispatch(deleteAPost(props.postId));
+		dispatch(friendAction.deletePost(props.postId));
 	};
 
 	const handleFriendOnEnter = async (text: string) => {

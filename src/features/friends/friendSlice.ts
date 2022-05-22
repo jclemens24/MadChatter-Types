@@ -12,7 +12,7 @@ interface FriendState {
 	friendProfile: User;
 	friendPosts: Post[];
 	error: boolean;
-	errorMessage: string | undefined | AppError;
+	errorMessage: string | undefined;
 	status: 'idle' | 'success' | 'failed' | 'pending';
 }
 
@@ -34,7 +34,7 @@ const friendSlice = createSlice({
 		acknowledgeError(state) {
 			state.error = false;
 		},
-		deleteAPost(state, action) {
+		deletePost(state, action) {
 			const foundPost = state.friendPosts.find(
 				post => post._id === action.payload
 			);
@@ -59,6 +59,10 @@ const friendSlice = createSlice({
 			const { posts, user } = action.payload;
 			state.friendPosts = posts;
 			state.friendProfile = user;
+			state.friendPosts.sort(
+				(a, b) =>
+					new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+			);
 		});
 		builder.addCase(getFriendsProfileData.pending, state => {
 			state.status = 'pending';
@@ -122,6 +126,10 @@ const friendSlice = createSlice({
 			state.status = 'success';
 			const { post } = action.payload;
 			state.friendPosts.push(post);
+			state.friendPosts.sort(
+				(a, b) =>
+					new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+			);
 		});
 	},
 });
@@ -134,7 +142,7 @@ export const getFriendsProfileData = createAsyncThunk<
 	const controller = new AbortController();
 	const res = await axios({
 		method: 'GET',
-		url: `${process.env.REACT_APP_BACKEND_URL}/users/${userId}/profile/friends`,
+		url: `http://localhost:8000/api/users/${userId}/profile/friends`,
 		headers: {
 			Authorization: `Bearer ${token}`,
 		},
@@ -158,7 +166,7 @@ export const likeAFriendsPost = createAsyncThunk<
 	const controller = new AbortController();
 	const res = await axios({
 		method: 'PUT',
-		url: `${process.env.REACT_APP_BACKEND_URL}/posts/${postId}/like`,
+		url: `http://localhost:8000/api/posts/${postId}/like`,
 		headers: {
 			Authorization: `Bearer ${token}`,
 		},
@@ -182,7 +190,7 @@ export const dislikeAFriendsPost = createAsyncThunk<
 	const controller = new AbortController();
 	const res = await axios({
 		method: 'PUT',
-		url: `${process.env.REACT_APP_BACKEND_URL}/posts/${postId}/dislike`,
+		url: `http://localhost:8000/api/posts/${postId}/dislike`,
 		headers: {
 			Authorization: `Bearer ${token}`,
 		},
@@ -208,7 +216,7 @@ export const commentOnAFriendsPost = createAsyncThunk<
 		const controller = new AbortController();
 		const res = await axios({
 			method: 'POST',
-			url: `${process.env.REACT_APP_BACKEND_URL}/posts/${postId}/comments`,
+			url: `http://localhost:8000/api/posts/${postId}/comments`,
 			headers: {
 				Authorization: `Bearer ${token}`,
 			},
@@ -235,7 +243,7 @@ export const makeAPostOnFriendsWall = createAsyncThunk<
 >('friend/makeAPostOnFriendsWall', async ({ token, formData }, thunkAPI) => {
 	const res = await axios({
 		method: 'POST',
-		url: `${process.env.REACT_APP_BACKEND_URL}/posts`,
+		url: `http://localhost:8000/api/posts`,
 		headers: {
 			'Content-Type': 'application/json',
 			Authorization: `Bearer ${token}`,

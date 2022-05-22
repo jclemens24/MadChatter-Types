@@ -27,9 +27,6 @@ export interface Chat {
 }
 
 interface ServerToClientEvents {
-	noArg: () => void;
-	basicEmit: (a: number, b: string, c: Buffer) => void;
-	withAck: (d: string, callback: (e: number) => void) => void;
 	session: ({
 		sessionId,
 		userId,
@@ -38,7 +35,13 @@ interface ServerToClientEvents {
 		userId: string;
 	}) => void;
 	privateMessage: (data: Record<string, any>) => void;
-	on(ev: string, callback: (...args: any[]) => void): void;
+	userConnected: ({
+		_id,
+		connected,
+	}: {
+		_id: string;
+		connected: boolean;
+	}) => void;
 }
 
 interface ClientToServerEvents {
@@ -62,7 +65,7 @@ const Messenger = () => {
 	const [messages, setMessages] = useState<any[]>([]);
 	const [newMessage, setNewMessage] = useState('');
 	const [arrivalMessage, setArrivalMessage] = useState({});
-	const [onlineUsers, setOnlineUsers] = useState([]);
+	const [onlineUsers, setOnlineUsers] = useState<string[]>([]);
 	const { loading, error, sendRequest, clearError } = useHttp();
 	const socket = useRef<Socket<ServerToClientEvents, ClientToServerEvents>>();
 	const scrollRef = useRef<HTMLDivElement>(null);
@@ -87,6 +90,11 @@ const Messenger = () => {
 			}
 		});
 
+		socket.current.on('userConnected', ({ _id, connected }) => {
+			setOnlineUsers(prevState => {
+				return [...prevState, _id];
+			});
+		});
 		socket.current.on('privateMessage', data => {
 			setArrivalMessage({
 				sender: data.from,
@@ -158,8 +166,8 @@ const Messenger = () => {
 		};
 
 		socket.current!.emit('privateMessage', {
-			to: reciever,
 			content: newMessage,
+			to: reciever,
 			from: authUser,
 		});
 

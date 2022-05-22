@@ -6,9 +6,14 @@ import App from './App';
 import { initializeUserCheck } from './features/auth/authSlice';
 import './index.css';
 
-store.dispatch(
-	initializeUserCheck(JSON.parse(localStorage.getItem('user') as string))
-);
+const user = JSON.parse(localStorage.getItem('user') as any);
+if (user) {
+	store.dispatch(initializeUserCheck(user));
+}
+
+// store.dispatch(
+// 	initializeUserCheck(JSON.parse(localStorage.getItem('user') as string))
+// );
 
 const container = document.getElementById('root') as HTMLElement;
 const root = createRoot(container);
