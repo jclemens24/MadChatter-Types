@@ -78,7 +78,8 @@ exports.createNewPost = (0, catchAsync_1.catchAsync)((req, res, next) => __await
         toUser: req.body.to,
         fromUser: req.body.from,
         desc: req.body.desc,
-        image: image
+        image: image,
+        comments: []
     });
     res.status(200).json({
         status: 'success',

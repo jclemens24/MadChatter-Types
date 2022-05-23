@@ -46,4 +46,6 @@ router.get(
   getFriendsPosts
 );
 
+router.get('/search', userController.handleUserSearch);
+
 export { router };

@@ -309,3 +309,19 @@ export const deleteUserPhoto = catchAsync(
     });
   }
 );
+
+export const handleUserSearch = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { filter } = req.query;
+    console.log(filter);
+    if (typeof filter === 'string') {
+      const user = await User.find({ firstName: filter });
+      res.status(200).json({
+        status: 'success',
+        user
+      });
+    } else {
+      return next(new AppError('Error searching..', 404));
+    }
+  }
+);

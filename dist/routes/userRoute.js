@@ -58,4 +58,5 @@ router
     .put(userController.setUserCoverPhoto);
 router.route('/:userId/friends').patch(userController.unfollowAndFollowAFriend);
 router.get('/:userId/profile/friends', userController.getAUserProfile, postController_1.getFriendsPosts);
+router.get('/search', userController.handleUserSearch);
 //# sourceMappingURL=userRoute.js.map

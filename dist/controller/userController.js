@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteUserPhoto = exports.uploadCoverPhoto = exports.uploadUserPhoto = exports.resizeUserCoverPhoto = exports.resizeUserPhoto = exports.setUserCoverPhoto = exports.setUserPhoto = exports.getUserPhotos = exports.suggestFriends = exports.getAUserProfile = exports.unfollowAndFollowAFriend = exports.validateAUser = void 0;
+exports.handleUserSearch = exports.deleteUserPhoto = exports.uploadCoverPhoto = exports.uploadUserPhoto = exports.resizeUserCoverPhoto = exports.resizeUserPhoto = exports.setUserCoverPhoto = exports.setUserPhoto = exports.getUserPhotos = exports.suggestFriends = exports.getAUserProfile = exports.unfollowAndFollowAFriend = exports.validateAUser = void 0;
 const sharp_1 = __importDefault(require("sharp"));
 const uuid_1 = require("uuid");
 const fs_1 = __importDefault(require("fs"));
@@ -219,5 +219,19 @@ exports.deleteUserPhoto = (0, catchAsync_1.catchAsync)((req, res, next) => __awa
         status: 'success',
         message: 'Photo has been deleted'
     });
+}));
+exports.handleUserSearch = (0, catchAsync_1.catchAsync)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const { filter } = req.query;
+    console.log(filter);
+    if (typeof filter === 'string') {
+        const user = yield userModel_1.default.find({ firstName: filter });
+        res.status(200).json({
+            status: 'success',
+            user
+        });
+    }
+    else {
+        return next(new appError_1.AppError('Error searching..', 404));
+    }
 }));
 //# sourceMappingURL=userController.js.map

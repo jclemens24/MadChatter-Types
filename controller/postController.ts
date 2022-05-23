@@ -88,7 +88,8 @@ export const createNewPost = catchAsync(
       toUser: req.body.to,
       fromUser: req.body.from,
       desc: req.body.desc,
-      image: image
+      image: image,
+      comments: []
     });
 
     res.status(200).json({
