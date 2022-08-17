@@ -1,10 +1,11 @@
 import Conversation from '../model/conversationModel';
 import { Request, Response, NextFunction } from 'express';
+import { RequestWithUser } from './userController';
 import { AppError } from '../utils/appError';
 import { catchAsync } from '../utils/catchAsync';
 
 export const getConversations = catchAsync(
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req: RequestWithUser, res: Response, next: NextFunction) => {
     const userConversations = await Conversation.find({}).where(
       'members',
       req.user._id
@@ -22,7 +23,7 @@ export const getConversations = catchAsync(
 );
 
 export const getOneConversation = catchAsync(
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req: RequestWithUser, res: Response, next: NextFunction) => {
     const { friendId } = req.params;
 
     const conversation = await Conversation.findOne({

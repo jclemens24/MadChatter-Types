@@ -4,6 +4,7 @@ import bcrypt from 'bcryptjs';
 import { IPost } from './postModel';
 
 export interface IUser {
+  _id: mongoose.Types.ObjectId;
   firstName: mongoose.Schema.Types.String;
   lastName: Schema.Types.String;
   email: Schema.Types.String;
@@ -148,8 +149,7 @@ userSchema.pre('save', async function (next) {
 });
 
 userSchema.methods.verifyPassword = async function (candidatePass, userPass) {
-  const result = await bcrypt.compare(candidatePass, userPass);
-  return result;
+  return await bcrypt.compare(candidatePass, userPass);
 };
 
 const User = mongoose.model<IUser, Model<IUser, {}, IUserMethods>>(

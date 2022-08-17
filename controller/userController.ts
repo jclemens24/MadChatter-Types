@@ -2,13 +2,19 @@ import sharp from 'sharp';
 import { v4 } from 'uuid';
 import fs from 'fs';
 import User from '../model/userModel';
+import { IUser } from '../model/userModel';
 import Post from '../model/postModel';
 import { AppError } from '../utils/appError';
 import { catchAsync } from '../utils/catchAsync';
 import { Response, Request, NextFunction } from 'express';
 
+export interface RequestWithUser extends Request {
+  user: IUser;
+  friend: IUser;
+}
+
 export const validateAUser = catchAsync(
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req: RequestWithUser, res: Response, next: NextFunction) => {
     const userId = req.user._id;
 
     const user = await User.findById(userId).populate('followers').populate({
@@ -36,7 +42,7 @@ export const validateAUser = catchAsync(
 );
 
 export const unfollowAndFollowAFriend = catchAsync(
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req: RequestWithUser, res: Response, next: NextFunction) => {
     const { userId } = req.params;
     const userFriend = req.body.id;
 
@@ -92,7 +98,7 @@ export const unfollowAndFollowAFriend = catchAsync(
 );
 
 export const getAUserProfile = catchAsync(
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req: RequestWithUser, res: Response, next: NextFunction) => {
     const { userId } = req.params;
 
     if (!userId) {
@@ -180,7 +186,7 @@ export const setUserPhoto = catchAsync(
 );
 
 export const setUserCoverPhoto = catchAsync(
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req: RequestWithUser, res: Response, next: NextFunction) => {
     const updatePhoto = await User.findByIdAndUpdate(
       req.user._id,
       { coverPic: req.params.pid },
@@ -227,8 +233,8 @@ export const resizeUserCoverPhoto = catchAsync(
 );
 
 export const uploadUserPhoto = catchAsync(
-  async (req: Request, res: Response, next: NextFunction) => {
-    const image = req.file.filename;
+  async (req: RequestWithUser, res: Response, next: NextFunction) => {
+    const image = req.file!.filename;
 
     const user = await User.findByIdAndUpdate(
       req.user._id,
@@ -253,8 +259,8 @@ export const uploadUserPhoto = catchAsync(
 );
 
 export const uploadCoverPhoto = catchAsync(
-  async (req: Request, res: Response, next: NextFunction) => {
-    const image = req.file.filename;
+  async (req: RequestWithUser, res: Response, next: NextFunction) => {
+    const image = req.file!.filename;
 
     const user = await User.findByIdAndUpdate(
       req.user._id,
@@ -284,7 +290,7 @@ export const uploadCoverPhoto = catchAsync(
 );
 
 export const deleteUserPhoto = catchAsync(
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req: RequestWithUser, res: Response, next: NextFunction) => {
     const photoName = req.params.pid;
     await User.findByIdAndUpdate(
       req.user._id,

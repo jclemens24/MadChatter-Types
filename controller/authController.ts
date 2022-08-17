@@ -8,6 +8,7 @@ import { catchAsync } from '../utils/catchAsync';
 import getCoordsForAddress from '../utils/location';
 import { model, Types, HydratedDocument } from 'mongoose';
 import { get } from '../routes/userRoute';
+import { RequestWithUser } from './userController';
 
 interface PopulatedUser {
   following: HydratedDocument<IUser> | null;
@@ -72,7 +73,6 @@ export const login = catchAsync(
         )
       );
     }
-
     const user = await User.findOne({ email })
       .select('+password')
       .populate({ path: 'following', strictPopulate: false });
@@ -107,7 +107,7 @@ export const login = catchAsync(
 );
 
 export const verifyAuth = catchAsync(
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req: RequestWithUser, res: Response, next: NextFunction) => {
     let token: string | undefined;
 
     if (

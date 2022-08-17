@@ -1,5 +1,6 @@
 import Comment from '../model/commentsModel';
 import { Request, Response, NextFunction } from 'express';
+import { RequestWithUser } from './userController';
 import { catchAsync } from '../utils/catchAsync';
 import { AppError } from '../utils/appError';
 

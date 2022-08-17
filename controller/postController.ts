@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
+import { RequestWithUser } from './userController';
 import sharp from 'sharp';
 import { v4 } from 'uuid';
 import Post from '../model/postModel';
@@ -100,7 +101,7 @@ export const createNewPost = catchAsync(
 );
 
 export const likePost = catchAsync(
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req: RequestWithUser, res: Response, next: NextFunction) => {
     const { postId } = req.params;
 
     const checkPostLiked = await Post.findById(postId).where(
@@ -128,7 +129,7 @@ export const likePost = catchAsync(
 );
 
 export const dislikePost = catchAsync(
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req: RequestWithUser, res: Response, next: NextFunction) => {
     const { postId } = req.params;
 
     const post = await Post.findByIdAndUpdate(
@@ -165,7 +166,7 @@ export const deleteOnePost = catchAsync(
 );
 
 export const getFriendsPosts = catchAsync(
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req: RequestWithUser, res: Response, next: NextFunction) => {
     const friendPost = await Post.find({ toUser: req.friend._id }).populate({
       path: 'comments',
       model: Comment
